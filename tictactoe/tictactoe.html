@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    .board {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-gap: 10px;
+      margin: 10px;
+    }
+    .square {
+      background-color: #fff;
+      border: 1px solid #999;
+      font-size: 48px;
+      font-weight: bold;
+      text-align: center;
+    }
+    .btn {
+      background-color: #ecece3;
+      
+      border: 1px solid #999;
+      font-size: 48px;
+      <!-- font-weight: bold; -->
+      text-align: center;
+      align-self: center;
+      margin: 20px auto;
+      display: block;
+
+    }
+      
+  </style>
+</head>
+<body>
+  <div id="game">
+    <div class="board">
+      <div class="square" id="square0">_</div>
+      <div class="square" id="square1">_</div>
+      <div class="square" id="square2">_</div>
+      <div class="square" id="square3">_</div>
+      <div class="square" id="square4">_</div>
+      <div class="square" id="square5">_</div>
+      <div class="square" id="square6">_</div>
+      <div class="square" id="square7">_</div>
+      <div class="square" id="square8">_</div>
+    </div>
+    <button id="restart-button" class="btn">Restart</button>
+  </div>
+
+  <script>
+    const squares = document.querySelectorAll('.square');
+    const restartButton = document.querySelector('#restart-button');
+    let currentPlayer = 'X';
+
+    squares.forEach(square => {
+      square.addEventListener('click', handleClick);
+    });
+    restartButton.addEventListener('click', restartGame);
+
+    function handleClick(e) {
+      if (e.target.textContent === '_') {
+        e.target.textContent = currentPlayer;
+        if (checkForWin()) {
+          alert(currentPlayer + ' wins!');
+        } else if (checkForDraw()) {
+          alert("It's a draw!");
+        } else {
+          currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+        }
+      }
+    }
+
+    function checkForWin() {
+      const winConditions = [
+        [0, 1, 2], [3, 4, 5], [6, 7, 8],
+        [0, 3, 6], [1, 4, 7], [2, 5, 8],
+        [0, 4, 8], [2, 4, 6]
+      ];
+      for (const condition of winConditions) {
+        if (
+          squares[condition[0]].textContent === currentPlayer &&
+          squares[condition[1]].textContent === currentPlayer &&
+          squares[condition[2]].textContent === currentPlayer
+        ) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    function checkForDraw() {
+      for (const square of squares) {
+        if (square.textContent === '_') {
+          return false;
+        }
+      }
+      return true;
+    }
+    function restartGame() {
+        currentPlayer = 'X';
+        for (const square of squares) {
+            square.textContent = '_';
+          }
+          
+    }
+  </script>
+</body>
+</html>
